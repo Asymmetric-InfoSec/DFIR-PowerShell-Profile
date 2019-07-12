@@ -23,10 +23,16 @@ $Aliases = @(
 #---------End Configuration Section---------#
 
 #Aliases
-Set-Alias @Aliases
+foreach ($Alias in $Aliases){
+
+    Set-Alias @Alias
+}
 
 #Modules to Import
-Import-Module @ImportModules -Force
+foreach ($Module in $ImportModules){
+
+    Import-Module @Modules -Force   
+}
 
 #Console Appearance adjustments - Change colors as desired in the configuration section
 if ($host.UI.RawUI.WindowTitle -match 'Administrator') {
