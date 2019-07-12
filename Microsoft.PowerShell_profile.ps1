@@ -1,10 +1,32 @@
-#Console Appearance adjustments - Change colors as desired
+########## DFIR PowerShell Profile ##########
 
+#--------Begin Configuration Section--------#
+#Shell Colors
 $AdministratorBackground = 'DarkBlue'
 $AdministratorForeground = 'White'
 $UserBackground = 'DarkBlue'
 $UserForeground = 'White'
+$WorkingDirectory = 'C:\'
 
+#Modules to import
+$ImportModules = @( 
+    @{Name='ActiveDirectory';ErrorAction='SilentlyContinue'}
+)
+
+#Aliases
+$Aliases = @(
+    @{Name = 'claer';Value='clear'}
+)
+
+#---------End Configuration Section---------#
+
+#Aliases
+Set-Alias @Aliases
+
+#Modules to Import
+Import-Module @ImportModules -Force
+
+#Console Appearance adjustments - Change colors as desired in the configuration section
 if ($host.UI.RawUI.WindowTitle -match 'Administrator') {
 
     $host.UI.RawUI.BackgroundColor = $AdministratorBackground
@@ -17,15 +39,8 @@ if ($host.UI.RawUI.WindowTitle -match 'Administrator') {
 
 } 
 
-#Modules to Import
-
-Import-Module ActiveDirectory -Force
-
 #Change to Starting working directory
 #Update the working directory to the working directory of your choice
-
-$WorkingDirectory = 'C:\'
-
 if (!(Test-Path $WorkingDirectory)){
 
     New-Item -Type Directory -Path $WorkingDirectory -ForegroundColor
@@ -35,10 +50,6 @@ if (!(Test-Path $WorkingDirectory)){
 
     cd $WorkingDirectory
 }
-
-#Aliases
-
-Set-Alias -Name claer -Value clear
 
 #Functions
 #Base64-Encode: Encode strings into base64 encoded strings
@@ -50,12 +61,10 @@ function Base64-Encode {
         [string]$InputObject
     )
 
-    [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes("$InputObject"))
-    
+    [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes("$InputObject"))    
 }
 
 #Base64-Decode: Decode base64 encoded strings
-
 function Base64-Decode {
     [CmdletBinding()]
     param(
@@ -64,7 +73,6 @@ function Base64-Decode {
     )
 
     [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("$InputObject"))
-
 }
 
 #URL-Encode: Encode strings into URL encoded strings
@@ -86,8 +94,7 @@ function URL-Decode{
         [string] $InputObject
     )
 
-    [System.Web.HttpUtility]::UrlDecode($InputObject)
-    
+    [System.Web.HttpUtility]::UrlDecode($InputObject)   
 }
 
 #Hex-Encode: Encode strings into hex encoded strings
@@ -114,8 +121,7 @@ function Hex-Decode{
     )
 
     $SplitInput = $InputObject.Replace(" ","")
-    ($SplitInput-split"(..)"|Where-Object{$_}|Foreach-Object{[char][convert]::ToInt16($_,16)})-join""
-    
+    ($SplitInput-split"(..)"|Where-Object{$_}|Foreach-Object{[char][convert]::ToInt16($_,16)})-join""   
 }
 
 #Convert-ToEpoch: Converts from human readable date and time to Epoch timestamp (All timestamps assume UTC)
@@ -127,8 +133,7 @@ function Convert-ToEpoch{
     )
 
     $FormattedDate = ($InputObject -f "mm/dd/yyyy hh:mm")
-    (New-TimeSpan -Start (Get-Date -Date '01/01/1970') -End $FormattedDate).TotalSeconds
-    
+    (New-TimeSpan -Start (Get-Date -Date '01/01/1970') -End $FormattedDate).TotalSeconds    
 }
 
 #Convert-FromEpoch: Converts from Epoch timestamp to human readable timestamp (All timestamps assume UTC)
@@ -157,8 +162,7 @@ function Convert-ToMsftFileTime{
     )
 
     [DateTime]$FormattedDate = ($InputObject -f "mm/dd/yyyy hh:mm")
-    $FormattedDate.ToFileTimeUtc()
-    
+    $FormattedDate.ToFileTimeUtc()   
 }
 
 #Convert-FromMsftFileTime: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
@@ -169,6 +173,5 @@ function Convert-FromMsftFileTime{
         [string] $InputObject
     )
 
-    [DateTime]::FromFileTimeUtc($InputObject)
-    
+    [DateTime]::FromFileTimeUtc($InputObject)  
 }
