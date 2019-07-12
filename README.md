@@ -26,7 +26,16 @@ Example: Adding `@{Name = 'claer';Value='clear'}` to the `$Aliases` array would 
 
 `Base64-Encode`: Encode strings into base64 encoded strings
 
+Example: `Base64-Encode 'Asymmetric Info Sec Rocks - Checkout Power-Response!'` 
+
+Result: `QQBzAHkAbQBtAGUAdAByAGkAYwAgAEkAbgBmAG8AIABTAGUAYwAgAFIAbwBjAGsAcwAgAC0AIABDAGgAZQBjAGsAbwB1AHQAIABQAG8AdwBlAHIALQBSAGUAcwBwAG8AbgBzAGUAIQA=`
+
 `Base64-Decode`: Decode base64 encoded strings
+
+Example: ` Base64-Decode QQBzAHkAbQBtAGUAdAByAGkAYwAgAEkAbgBmAG8AIABTAGUAYwAgAFIAbwBjAGsAcwAgAC0AIABDAGgAZQBjAGsAbwB1AHQAIABQAG8AdwBlAHIALQBSAGUAc
+wBwAG8AbgBzAGUAIQA=`
+
+Result: `'Asymmetric Info Sec Rocks - Checkout Power-Response!'`
 
 `URL-Encode`: Encode strings into URL encoded strings
 
