@@ -2,9 +2,9 @@
 
 This PowerShell profile was created to assist with common DFIR related tasks in Windows PowerShell. The intent was to give more of a Bash feel for what can be done at the commandline without having to move to a Linux machine. This is also a good profile to implement into a Windows analysis machine for common analysis commandline tools.
 
-###Functions###
+### Functions ###
 
-####Encoding and Decoding Functions####
+#### Encoding and Decoding Functions ####
 
 `Base64-Encode`: Encode strings into base64 encoded strings
 
@@ -18,7 +18,7 @@ This PowerShell profile was created to assist with common DFIR related tasks in 
 
 `Hex-Decode`: Decodes Hexidecimal encoded strings
 
-####Timestamp Conversions####
+#### Timestamp Conversions ####
 
 `Convert-ToEpoch`: Convert human readable date and time to Epoch timestamp (All timestamps assume UTC)
 
@@ -28,6 +28,6 @@ This PowerShell profile was created to assist with common DFIR related tasks in 
 
 `Convert-FromMsftFileTime`: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
 
-###Alaises###
+### Alaises ###
 
 `Claer`: Alias for `Clear`
