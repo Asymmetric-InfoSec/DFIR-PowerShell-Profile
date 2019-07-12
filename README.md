@@ -2,6 +2,24 @@
 
 This PowerShell profile was created to assist with common DFIR related tasks in Windows PowerShell. The intent was to give more of a Bash feel for what can be done at the commandline without having to move to a Linux machine. This is also a good profile to implement into a Windows analysis machine for common analysis commandline tools.
 
+### Configuration Section ###
+
+#### Shell Colors ####
+Allows you to specifiy the shell colors associated with administrator and user shells
+
+#### Working/Startup Directory ####
+Allows you to specify the directory that PowerShell will move to after loading the profile
+
+#### Modules to Import ####
+Allows you to specify what modules are loaded by PowerShell. Each module should be added to the array as a hashtable with key value pairs representing parameters and the deisred parameter values. 
+
+Example: Adding `@{Name=ActiveDirectory;ErrorAction=SilentlyContinue}` to the `$ImportModules` array would result in the following PowerShell command being executed by the profile import: `Import-Module -Name ActiveDirectory -ErrorAction SilentlyContinue -Force`
+
+#### Aliases ####
+Allows you to create aliases to use during your PowerShell session. Each alias should be added to the array as a hashtable with key values pairs representing the `Name` and `Value` for the alias.
+
+Example: Adding `@{Name = 'claer';Value='clear'}` to the `$Aliases` array would result in the following PowerShell command being executed via the profile import: `Set-Alias -Name 'claer' -Value 'clear'`
+
 ### Functions ###
 
 #### Encoding and Decoding Functions ####
