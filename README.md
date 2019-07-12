@@ -4,6 +4,8 @@ This PowerShell profile was created to assist with common DFIR related tasks in 
 
 ###Functions###
 
+####Encoding and Decoding Functions####
+
 `Base64-Encode`: Encode strings into base64 encoded strings
 
 `Base64-Decode`: Decode base64 encoded strings
@@ -15,6 +17,12 @@ This PowerShell profile was created to assist with common DFIR related tasks in 
 `Hex-Encode`: Encode strings into hex encoded strings
 
 `Hex-Decode`: Decodes Hexidecimal encoded strings
+
+####Timestamp Conversions####
+
+`Convert-ToEpoch`: Convert human readable date and time to Epoch timestamp
+
+`Convert-FromEpoch`: Converts from Epoch timestamp to human readable timestamp
 
 ###Alaises###
 
