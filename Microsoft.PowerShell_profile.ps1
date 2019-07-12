@@ -89,3 +89,31 @@ function URL-Decode{
     [System.Web.HttpUtility]::UrlDecode($InputObject)
     
 }
+
+#Hex-Encode: Encode strings into hex encoded strings
+function Hex-Encode{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$true)]
+        [string] $InputObject
+    )
+
+    $HexOutput = ""
+    $InputObject.ToCharArray() | Foreach-Object -process {
+        $HexOutput += '{0:X}' -f [int][char]$_
+    }
+    return $HexOutput 
+}
+
+#Hex-Decode: Decodes Hexidecimal encoded strings
+function Hex-Decode{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$true)]
+        [string] $InputObject
+    )
+
+    $SplitInput = $InputObject.Replace(" ","")
+    ($SplitInput-split"(..)"|Where-Object{$_}|Foreach-Object{[char][convert]::ToInt16($_,16)})-join""
+    
+}
