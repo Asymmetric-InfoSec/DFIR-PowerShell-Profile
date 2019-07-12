@@ -43,7 +43,7 @@ if ($host.UI.RawUI.WindowTitle -match 'Administrator') {
 #Update the working directory to the working directory of your choice
 if (!(Test-Path $WorkingDirectory)){
 
-    New-Item -Type Directory -Path $WorkingDirectory -ForegroundColor
+    New-Item -Type Directory -Path $WorkingDirectory -Force
     cd $WorkingDirectory
 
 } else {
