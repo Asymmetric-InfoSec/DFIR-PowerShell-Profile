@@ -46,7 +46,7 @@ Set-Alias -Name claer -Value clear
 function Base64-Encode {
     [CmdletBinding()]
     param(
-        [Parameter(Position=0,Mandatory=$true)]
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string]$InputObject
     )
 
@@ -59,7 +59,7 @@ function Base64-Encode {
 function Base64-Decode {
     [CmdletBinding()]
     param(
-        [Parameter(Position=0,Mandatory=$true)]
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
     )
 
@@ -71,7 +71,7 @@ function Base64-Decode {
 function URL-Encode{
     [CmdletBinding()]
     param(
-        [Parameter(Position=0,Mandatory=$true)]
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
     )
 
@@ -82,7 +82,7 @@ function URL-Encode{
 function URL-Decode{
     [CmdletBinding()]
     param(
-        [Parameter(Position=0,Mandatory=$true)]
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
     )
 
@@ -94,7 +94,7 @@ function URL-Decode{
 function Hex-Encode{
     [CmdletBinding()]
     param(
-        [Parameter(Position=0,Mandatory=$true)]
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
     )
 
@@ -109,11 +109,66 @@ function Hex-Encode{
 function Hex-Decode{
     [CmdletBinding()]
     param(
-        [Parameter(Position=0,Mandatory=$true)]
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
     )
 
     $SplitInput = $InputObject.Replace(" ","")
     ($SplitInput-split"(..)"|Where-Object{$_}|Foreach-Object{[char][convert]::ToInt16($_,16)})-join""
+    
+}
+
+#Convert-ToEpoch: Converts from human readable date and time to Epoch timestamp (All timestamps assume UTC)
+function Convert-ToEpoch{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
+        [string] $InputObject
+    )
+
+    $FormattedDate = ($InputObject -f "mm/dd/yyyy hh:mm")
+    (New-TimeSpan -Start (Get-Date -Date '01/01/1970') -End $FormattedDate).TotalSeconds
+    
+}
+
+#Convert-FromEpoch: Converts from Epoch timestamp to human readable timestamp (All timestamps assume UTC)
+function Convert-FromEpoch{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
+        [string] $InputObject
+    )
+
+    if ($InputObject.Length -gt 10){
+
+        (Get-Date -Date '01/01/1970').AddMilliseconds($InputObject)
+    } else {
+
+        (Get-Date -Date '01/01/1970').AddSeconds($InputObject)
+    }   
+}
+
+#Convert-ToMsftFileTime: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
+function Convert-ToMsftFileTime{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
+        [string] $InputObject
+    )
+
+    [DateTime]$FormattedDate = ($InputObject -f "mm/dd/yyyy hh:mm")
+    $FormattedDate.ToFileTimeUtc()
+    
+}
+
+#Convert-FromMsftFileTime: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
+function Convert-FromMsftFileTime{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
+        [string] $InputObject
+    )
+
+    [DateTime]::FromFileTimeUtc($InputObject)
     
 }
