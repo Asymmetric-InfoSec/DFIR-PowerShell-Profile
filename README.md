@@ -8,6 +8,10 @@ This PowerShell profile was created to assist with common DFIR related tasks in 
 
 `Base64-Decode`: Decode base64 encoded strings
 
+`URL-Encode`: Encode strings into URL encoded strings
+
+`URL-Decode`: Decode URL encoded strings
+
 ###Alaises###
 
 `Claer`: Alias for `Clear`
