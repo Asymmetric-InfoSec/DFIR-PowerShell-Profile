@@ -1,55 +1,68 @@
-#Change background if in Admin Session
+#Console Appearance adjustments - Change colors as desired
 
-if ($host.UI.RawUI.WindowTitle -match "Administrator") {
+$AdministratorBackground = 'DarkBlue'
+$AdministratorForeground = 'White'
+$UserBackground = 'DarkBlue'
+$UserForeground = 'White'
 
-    $host.UI.RawUI.BackgroundColor = "DarkRed"
-    $Host.UI.RawUI.ForegroundColor = "White"
+if ($host.UI.RawUI.WindowTitle -match 'Administrator') {
+
+    $host.UI.RawUI.BackgroundColor = $AdministratorBackground
+    $Host.UI.RawUI.ForegroundColor = $AdministratorForeground
 
 }else{
 
-    $host.UI.RawUI.BackgroundColor = "DarkBlue"
-    $Host.UI.RawUI.ForegroundColor = "White"
+    $host.UI.RawUI.BackgroundColor = $UserBackground
+    $Host.UI.RawUI.ForegroundColor = $UserForeground
 
 } 
 
-#Import CSIRT workflow modules
+#Modules to Import
 
-Import-Module "C:\Program Files\WindowsPowerShell\Modules\Credential" -force
-Import-Module "C:\Program Files\WindowsPowerShell\Modules\ServiceNow" -force
-Import-Module "C:\Program Files\WindowsPowerShell\Modules\PhishMe" -force
-Import-Module "C:\Program Files\WindowsPowerShell\Modules\Case" -force
+Import-Module ActiveDirectory -Force
 
-#Change to tools directory
-cd C:\Tools\
+#Change to Starting working directory
+#Update the working directory to the working directory of your choice
 
-#base64 functions
+$WorkingDirectory = 'C:\'
 
-function base64-encode {
-    [CmdletBinding()]
-    Param(
-    [Parameter(Position=0)]
-    [string]$inputobject
-    )
+if (!(Test-Path $WorkingDirectory)){
 
-    [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes("$inputobject"))
-    
+    New-Item -Type Directory -Path $WorkingDirectory -ForegroundColor
+    cd $WorkingDirectory
+
+} else {
+
+    cd $WorkingDirectory
 }
 
-function base64-decode {
-    [CmdletBinding()]
-    Param(
-    [CmdletBinding()]
-    [Parameter(Position=0)]
-    [string] $inputobject
-    )
-
-    [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("$inputobject"))
-
-}
-
-#Set alias for clear because I cant type 
+#Aliases
 
 Set-Alias -Name claer -Value clear
 
-#Greeting of the day
-Write-Host "Ready to do thy bidding, my master"
+#Functions
+#Base64-Encode: Encode strings into base64 encoded strings
+
+function Base64-Encode {
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$true)]
+        [string]$InputObject
+    )
+
+    [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes("$InputObject"))
+    
+}
+
+#Base64-Decode: Decode base64 encoded strings
+
+function Base64-Decode {
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$true)]
+        [string] $InputObject
+    )
+
+    [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("$InputObject"))
+
+}
