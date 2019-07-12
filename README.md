@@ -12,6 +12,10 @@ This PowerShell profile was created to assist with common DFIR related tasks in 
 
 `URL-Decode`: Decode URL encoded strings
 
+`Hex-Encode`: Encode strings into hex encoded strings
+
+`Hex-Decode`: Decodes Hexidecimal encoded strings
+
 ###Alaises###
 
 `Claer`: Alias for `Clear`
