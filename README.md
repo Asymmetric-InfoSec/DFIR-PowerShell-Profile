@@ -5,6 +5,7 @@ This PowerShell profile was created to assist with common DFIR related tasks in 
 ###Functions###
 
 `Base64-Encode`: Encode strings into base64 encoded strings
+
 `Base64-Decode`: Decode base64 encoded strings
 
 ###Alaises###
