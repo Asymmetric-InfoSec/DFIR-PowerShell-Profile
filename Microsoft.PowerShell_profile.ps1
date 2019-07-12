@@ -66,3 +66,26 @@ function Base64-Decode {
     [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("$InputObject"))
 
 }
+
+#URL-Encode: Encode strings into URL encoded strings
+function URL-Encode{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$true)]
+        [string] $InputObject
+    )
+
+    [System.Web.HttpUtility]::UrlEncode($InputObject)
+}
+
+#URL-Decode: Decode URL encoded strings
+function URL-Decode{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0,Mandatory=$true)]
+        [string] $InputObject
+    )
+
+    [System.Web.HttpUtility]::UrlDecode($InputObject)
+    
+}
