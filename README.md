@@ -20,9 +20,13 @@ This PowerShell profile was created to assist with common DFIR related tasks in 
 
 ####Timestamp Conversions####
 
-`Convert-ToEpoch`: Convert human readable date and time to Epoch timestamp
+`Convert-ToEpoch`: Convert human readable date and time to Epoch timestamp (All timestamps assume UTC)
 
-`Convert-FromEpoch`: Converts from Epoch timestamp to human readable timestamp
+`Convert-FromEpoch`: Converts from Epoch timestamp to human readable timestamp (All timestamps assume UTC)
+
+`Convert-ToMsftFileTime`: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
+
+`Convert-FromMsftFileTime`: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
 
 ###Alaises###
 
