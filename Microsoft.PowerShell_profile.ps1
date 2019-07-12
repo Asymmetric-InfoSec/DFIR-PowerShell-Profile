@@ -6,6 +6,8 @@ $AdministratorBackground = 'DarkBlue'
 $AdministratorForeground = 'White'
 $UserBackground = 'DarkBlue'
 $UserForeground = 'White'
+
+#Working/Startup Directory
 $WorkingDirectory = 'C:\'
 
 #Modules to import
