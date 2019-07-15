@@ -24,37 +24,37 @@ Example: Adding `@{Name = 'claer';Value='clear'}` to the `$Aliases` array would 
 
 #### Encoding and Decoding Functions ####
 
-`Base64-Encode`: Encode strings into base64 encoded strings
+##### `Base64-Encode`: Encode strings into base64 encoded strings #####
 
 Example: `Base64-Encode 'Asymmetric Info Sec Rocks - Checkout Power-Response!'` 
 
 Result: `QQBzAHkAbQBtAGUAdAByAGkAYwAgAEkAbgBmAG8AIABTAGUAYwAgAFIAbwBjAGsAcwAgAC0AIABDAGgAZQBjAGsAbwB1AHQAIABQAG8AdwBlAHIALQBSAGUAcwBwAG8AbgBzAGUAIQA=`
 
-`Base64-Decode`: Decode base64 encoded strings
+##### `Base64-Decode`: Decode base64 encoded strings #####
 
 Example: ` Base64-Decode QQBzAHkAbQBtAGUAdAByAGkAYwAgAEkAbgBmAG8AIABTAGUAYwAgAFIAbwBjAGsAcwAgAC0AIABDAGgAZQBjAGsAbwB1AHQAIABQAG8AdwBlAHIALQBSAGUAc
 wBwAG8AbgBzAGUAIQA=`
 
 Result: `'Asymmetric Info Sec Rocks - Checkout Power-Response!'`
 
-`URL-Encode`: Encode strings into URL encoded strings
+##### `URL-Encode`: Encode strings into URL encoded strings #####
 
-`URL-Decode`: Decode URL encoded strings
+##### `URL-Decode`: Decode URL encoded strings #####
 
-`Hex-Encode`: Encode strings into hex encoded strings
+##### `Hex-Encode`: Encode strings into hex encoded strings #####
 
-`Hex-Decode`: Decodes Hexidecimal encoded strings
+##### `Hex-Decode`: Decodes Hexidecimal encoded strings #####
 
 #### Timestamp Conversions ####
 
-`Convert-ToEpoch`: Convert human readable date and time to Epoch timestamp (All timestamps assume UTC)
+##### `Convert-ToEpoch`: Convert human readable date and time to Epoch timestamp (All timestamps assume UTC) #####
 
-`Convert-FromEpoch`: Converts from Epoch timestamp to human readable timestamp (All timestamps assume UTC)
+##### `Convert-FromEpoch`: Converts from Epoch timestamp to human readable timestamp (All timestamps assume UTC) #####
 
-`Convert-ToMsftFileTime`: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
+##### `Convert-ToMsftFileTime`: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC) #####
 
-`Convert-FromMsftFileTime`: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
+##### `Convert-FromMsftFileTime`: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC) #####
 
 ### Alaises ###
 
-`Claer`: Alias for `Clear`
+##### `Claer`: Alias for `Clear` #####
