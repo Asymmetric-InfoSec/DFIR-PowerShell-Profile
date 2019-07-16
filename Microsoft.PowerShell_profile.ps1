@@ -1,67 +1,79 @@
 ########## DFIR PowerShell Profile ##########
 
+$TmpVerbosePreference = $VerbosePreference
+# $VerbosePreference = 'Continue'
+
 #--------Begin Configuration Section--------#
-#Shell Colors
-$AdministratorBackground = 'DarkBlue'
-$AdministratorForeground = 'White'
-$UserBackground = 'DarkBlue'
-$UserForeground = 'White'
+$DefaultConfig = @{
+    #Shell Colors
+    AdministratorBackground = 'DarkBlue'
+    AdministratorForeground = 'White'
+    UserBackground = 'DarkBlue'
+    UserForeground = 'White'
 
-#Working/Startup Directory
-$WorkingDirectory = 'C:\'
+    #Working/Startup Directory
+    WorkingDirectory = 'C:\'
 
-#Modules to import
-$ImportModules = @( 
-    @{Name='ActiveDirectory';ErrorAction='SilentlyContinue'}
-)
+    #Modules to import
+    ImportModules = @(
+        @{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'}
+    )
 
-#Aliases
-$Aliases = @(
-    @{Name = 'claer';Value='clear'}
-)
-
+    #Aliases
+    Aliases = @(
+        @{Name = 'claer';Value='clear'}
+    )
+}
 #---------End Configuration Section---------#
 
-#Aliases
-foreach ($Alias in $Aliases){
+#Try to get the config file
+try {
+    Import-LocalizedData -BindingVariable 'Config' -BaseDirectory $PSScriptRoot -FileName 'Config.psd1' -ErrorAction 'Stop'
+    $DefaultConfig.Keys | Where-Object { $Config.Keys -NotContains $PSItem } | Foreach-Object { $Config.$PSItem = $DefaultConfig.$PSItem }
+} catch {
+    Write-Verbose -Message "No config file found, using the default config"
+    $Config = $DefaultConfig
+}
 
+#Aliases
+foreach ($Alias in $Config.Aliases) {
+    Write-Verbose -Message "Creating $($Alias.Name) Alias"
     Set-Alias @Alias
 }
 
 #Modules to Import
-foreach ($Module in $ImportModules){
-
-    Import-Module @Modules -Force   
+foreach ($Module in $Config.ImportModules) {
+    Write-Verbose -Message "Importing $($Module.Name) Module"
+    Import-Module @Module -Force
 }
 
 #Console Appearance adjustments - Change colors as desired in the configuration section
-if ($host.UI.RawUI.WindowTitle -match 'Administrator') {
+if ($Host.UI.RawUI.WindowTitle -match 'Administrator') {
 
-    $host.UI.RawUI.BackgroundColor = $AdministratorBackground
-    $Host.UI.RawUI.ForegroundColor = $AdministratorForeground
-
-}else{
-
-    $host.UI.RawUI.BackgroundColor = $UserBackground
-    $Host.UI.RawUI.ForegroundColor = $UserForeground
-
-} 
-
-#Change to Starting working directory
-#Update the working directory to the working directory of your choice
-if (!(Test-Path $WorkingDirectory)){
-
-    New-Item -Type Directory -Path $WorkingDirectory -Force
-    cd $WorkingDirectory
+    $Host.UI.RawUI.BackgroundColor = $Config.AdministratorBackground
+    $Host.UI.RawUI.ForegroundColor = $Config.AdministratorForeground
 
 } else {
 
-    cd $WorkingDirectory
+    $Host.UI.RawUI.BackgroundColor = $Config.UserBackground
+    $Host.UI.RawUI.ForegroundColor = $Config.UserForeground
+
+}
+
+#Change to Starting working directory
+#Update the working directory to the working directory of your choice
+if (!(Test-Path $Config.WorkingDirectory)){
+
+    New-Item -Type Directory -Path $Config.WorkingDirectory -Force
+    Set-Location -Path $Config.WorkingDirectory
+
+} else {
+
+    Set-Location -Path $Config.WorkingDirectory
 }
 
 #Functions
 #Base64-Encode: Encode strings into base64 encoded strings
-
 function Base64-Encode {
     [CmdletBinding()]
     param(
@@ -69,7 +81,7 @@ function Base64-Encode {
         [string]$InputObject
     )
 
-    [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes("$InputObject"))    
+    [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes("$InputObject"))
 }
 
 #Base64-Decode: Decode base64 encoded strings
@@ -102,7 +114,7 @@ function URL-Decode{
         [string] $InputObject
     )
 
-    [System.Web.HttpUtility]::UrlDecode($InputObject)   
+    [System.Web.HttpUtility]::UrlDecode($InputObject)
 }
 
 #Hex-Encode: Encode strings into hex encoded strings
@@ -117,7 +129,7 @@ function Hex-Encode{
     $InputObject.ToCharArray() | Foreach-Object -process {
         $HexOutput += '{0:X}' -f [int][char]$_
     }
-    return $HexOutput 
+    return $HexOutput
 }
 
 #Hex-Decode: Decodes Hexidecimal encoded strings
@@ -129,7 +141,7 @@ function Hex-Decode{
     )
 
     $SplitInput = $InputObject.Replace(" ","")
-    ($SplitInput-split"(..)"|Where-Object{$_}|Foreach-Object{[char][convert]::ToInt16($_,16)})-join""   
+    ($SplitInput-split"(..)"|Where-Object{$_}|Foreach-Object{[char][convert]::ToInt16($_,16)})-join""
 }
 
 #Convert-ToEpoch: Converts from human readable date and time to Epoch timestamp (All timestamps assume UTC)
@@ -141,7 +153,7 @@ function Convert-ToEpoch{
     )
 
     $FormattedDate = ($InputObject -f "mm/dd/yyyy hh:mm")
-    (New-TimeSpan -Start (Get-Date -Date '01/01/1970') -End $FormattedDate).TotalSeconds    
+    (New-TimeSpan -Start (Get-Date -Date '01/01/1970') -End $FormattedDate).TotalSeconds
 }
 
 #Convert-FromEpoch: Converts from Epoch timestamp to human readable timestamp (All timestamps assume UTC)
@@ -158,7 +170,7 @@ function Convert-FromEpoch{
     } else {
 
         (Get-Date -Date '01/01/1970').AddSeconds($InputObject)
-    }   
+    }
 }
 
 #Convert-ToMsftFileTime: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
@@ -170,7 +182,7 @@ function Convert-ToMsftFileTime{
     )
 
     [DateTime]$FormattedDate = ($InputObject -f "mm/dd/yyyy hh:mm")
-    $FormattedDate.ToFileTimeUtc()   
+    $FormattedDate.ToFileTimeUtc()
 }
 
 #Convert-FromMsftFileTime: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
@@ -181,5 +193,10 @@ function Convert-FromMsftFileTime{
         [string] $InputObject
     )
 
-    [DateTime]::FromFileTimeUtc($InputObject)  
+    [DateTime]::FromFileTimeUtc($InputObject)
 }
+
+$VerbosePreference = $TmpVerbosePreference
+
+#Clean up created defaultconfig and config variables so they don't appear in session
+Remove-Variable -Name 'Alias','DefaultConfig','Config','Module','TmpVerbosePreference' -Force -ErrorAction 'SilentlyContinue'
