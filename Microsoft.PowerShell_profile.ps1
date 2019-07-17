@@ -123,7 +123,7 @@ function Base64-Decode {
         # Pad strings that are LENGTH % 4 != 0
         $Padding = '=' * ((4 - ($InputObject.Length % 4)) % 4)
         
-        $GetString.Invoke([System.Convert]::FromBase64String("$InputObject + $Padding"))
+        $GetString.Invoke([System.Convert]::FromBase64String($InputObject+$Padding))
     } 
 }
 
