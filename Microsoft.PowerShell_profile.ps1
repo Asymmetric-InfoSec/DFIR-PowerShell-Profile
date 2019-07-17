@@ -26,7 +26,7 @@ $DefaultConfig = @{
 }
 #---------End Configuration Section---------#
 
-#Try to get the config file
+#Try to get the config file (if used)
 try {
     Import-LocalizedData -BindingVariable 'Config' -BaseDirectory $PSScriptRoot -FileName 'Config.psd1' -ErrorAction 'Stop'
     $DefaultConfig.Keys | Where-Object { $Config.Keys -NotContains $PSItem } | Foreach-Object { $Config.$PSItem = $DefaultConfig.$PSItem }
@@ -78,10 +78,21 @@ function Base64-Encode {
     [CmdletBinding()]
     param(
         [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
-        [string]$InputObject
+        [string]$InputObject,
+
+        [ValidateSet('Unicode','UTF8','ASCII')]
+        [String]$Encoding = 'Unicode'
     )
 
-    [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes("$InputObject"))
+    begin {
+
+        $GetBytes = Invoke-Expression -Command "[System.Text.Encoding]::$Encoding.GetBytes"
+    }
+
+    process {
+
+        [System.Convert]::ToBase64String($GetBytes.Invoke("$InputObject"))
+    }   
 }
 
 #Base64-Decode: Decode base64 encoded strings
@@ -89,10 +100,31 @@ function Base64-Decode {
     [CmdletBinding()]
     param(
         [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
-        [string] $InputObject
+        [string] $InputObject,
+
+        [ValidateSet('Unicode','UTF8','ASCII')]
+        [String]$Encoding = 'Unicode'
     )
 
-    [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("$InputObject"))
+    begin {
+
+        $GetString = Invoke-Expression -Command "[System.Text.Encoding]::$Encoding.GetString"
+    }
+
+    process {
+
+        #Handle malformed base64 encoded entries (most likely from being truncated by tools)
+        if ($InputObject.Length % 4 -eq 1) {
+                
+                # Base64 string was probably truncated, append an 'A' (0) to the end to avoid a triple '=' padding error
+                $InputObject += 'A'
+            }
+
+        # Pad strings that are LENGTH % 4 != 0
+        $Padding = '=' * ((4 - ($InputObject.Length % 4)) % 4)
+        
+        $GetString.Invoke([System.Convert]::FromBase64String("$InputObject + $Padding"))
+    } 
 }
 
 #URL-Encode: Encode strings into URL encoded strings
@@ -103,7 +135,10 @@ function URL-Encode{
         [string] $InputObject
     )
 
-    [System.Web.HttpUtility]::UrlEncode($InputObject)
+    process {
+
+        [System.Web.HttpUtility]::UrlEncode($InputObject)
+    }
 }
 
 #URL-Decode: Decode URL encoded strings
@@ -114,7 +149,10 @@ function URL-Decode{
         [string] $InputObject
     )
 
-    [System.Web.HttpUtility]::UrlDecode($InputObject)
+    process {
+
+        [System.Web.HttpUtility]::UrlDecode($InputObject)
+    } 
 }
 
 #Hex-Encode: Encode strings into hex encoded strings
@@ -124,12 +162,14 @@ function Hex-Encode{
         [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
     )
+    process {
 
-    $HexOutput = ""
-    $InputObject.ToCharArray() | Foreach-Object -process {
-        $HexOutput += '{0:X}' -f [int][char]$_
-    }
-    return $HexOutput
+        $HexOutput = ""
+        $InputObject.ToCharArray() | Foreach-Object -process {
+            $HexOutput += '{0:X}' -f [int][char]$_
+        }
+        return $HexOutput
+    } 
 }
 
 #Hex-Decode: Decodes Hexidecimal encoded strings
@@ -139,9 +179,11 @@ function Hex-Decode{
         [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
     )
+    process {
 
-    $SplitInput = $InputObject.Replace(" ","")
-    ($SplitInput-split"(..)"|Where-Object{$_}|Foreach-Object{[char][convert]::ToInt16($_,16)})-join""
+        $SplitInput = $InputObject.Replace(" ","")
+        ($SplitInput-split"(..)"|Where-Object{$_}|Foreach-Object{[char][convert]::ToInt16($_,16)})-join""
+    }  
 }
 
 #Convert-ToEpoch: Converts from human readable date and time to Epoch timestamp (All timestamps assume UTC)
@@ -152,8 +194,11 @@ function Convert-ToEpoch{
         [string] $InputObject
     )
 
-    $FormattedDate = ($InputObject -f "mm/dd/yyyy hh:mm")
-    (New-TimeSpan -Start (Get-Date -Date '01/01/1970') -End $FormattedDate).TotalSeconds
+    process {
+
+        $FormattedDate = ($InputObject -f "mm/dd/yyyy hh:mm")
+        (New-TimeSpan -Start (Get-Date -Date '01/01/1970') -End $FormattedDate).TotalSeconds
+    }  
 }
 
 #Convert-FromEpoch: Converts from Epoch timestamp to human readable timestamp (All timestamps assume UTC)
@@ -164,12 +209,15 @@ function Convert-FromEpoch{
         [string] $InputObject
     )
 
-    if ($InputObject.Length -gt 10){
+    process {
 
-        (Get-Date -Date '01/01/1970').AddMilliseconds($InputObject)
-    } else {
+        if ($InputObject.Length -gt 10){
 
-        (Get-Date -Date '01/01/1970').AddSeconds($InputObject)
+            (Get-Date -Date '01/01/1970').AddMilliseconds($InputObject)
+        } else {
+
+            (Get-Date -Date '01/01/1970').AddSeconds($InputObject)
+        }
     }
 }
 
@@ -180,9 +228,11 @@ function Convert-ToMsftFileTime{
         [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
     )
+    process {
 
-    [DateTime]$FormattedDate = ($InputObject -f "mm/dd/yyyy hh:mm")
-    $FormattedDate.ToFileTimeUtc()
+        [DateTime]$FormattedDate = ($InputObject -f "mm/dd/yyyy hh:mm")
+        $FormattedDate.ToFileTimeUtc()
+    }  
 }
 
 #Convert-FromMsftFileTime: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
@@ -193,7 +243,10 @@ function Convert-FromMsftFileTime{
         [string] $InputObject
     )
 
-    [DateTime]::FromFileTimeUtc($InputObject)
+    process {
+
+        [DateTime]::FromFileTimeUtc($InputObject)
+    }  
 }
 
 $VerbosePreference = $TmpVerbosePreference
