@@ -1,7 +1,7 @@
 ########## DFIR PowerShell Profile ##########
 
 $TmpVerbosePreference = $VerbosePreference
-# $VerbosePreference = 'Continue'
+#$VerbosePreference = 'Continue'
 
 #--------Begin Configuration Section--------#
 $DefaultConfig = @{
@@ -23,6 +23,9 @@ $DefaultConfig = @{
     Aliases = @(
         @{Name = 'claer';Value='clear'}
     )
+
+    #PowerShell Remoting Options
+    $PSSessionOption.NoMachineProfile = $true
 }
 #---------End Configuration Section---------#
 
@@ -31,6 +34,7 @@ try {
     Import-LocalizedData -BindingVariable 'Config' -BaseDirectory $PSScriptRoot -FileName 'Config.psd1' -ErrorAction 'Stop'
     $DefaultConfig.Keys | Where-Object { $Config.Keys -NotContains $PSItem } | Foreach-Object { $Config.$PSItem = $DefaultConfig.$PSItem }
 } catch {
+    Write-Verbose -Message "Encountered error: $PSItem"
     Write-Verbose -Message "No config file found, using the default config"
     $Config = $DefaultConfig
 }
