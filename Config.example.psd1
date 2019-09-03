@@ -17,4 +17,7 @@
     # Aliases = @(
     #     @{Name = 'claer';Value='clear'}
     # )
+    
+    # ####PowerShell Remoting Options
+    # $PSSessionOption.NoMachineProfile = $true
 }
