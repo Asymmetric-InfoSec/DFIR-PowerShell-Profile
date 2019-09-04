@@ -271,6 +271,12 @@ function WhoIs{
     )
 
     process {
+
+        if (!$APIKey){
+
+            throw "No API key detected. Add API key to config file and try again."
+        }
+
         $APIBase = 'https://www.whoisxmlapi.com/whoisserver/WhoisService'
 
         $Uri = "{0}?apiKey={1}&domainName={2}" -f $APIBase,$APIKey,$Domain
@@ -285,6 +291,7 @@ function WhoIs{
     }
 }
 
+#XML based DNS lookups (https://www.whoisxmlapi.com - 500 free queries monthly, plans are really cheap afterwards)
 function DNSLookup{
     [CmdletBinding()]
     param (
@@ -292,6 +299,11 @@ function DNSLookup{
         [String]$APIKey = $Config.XMLAPIKey,
         [string]$Type = '_all'
     )
+
+    if (!$APIKey){
+
+        throw "No API key detected. Add API key to config file and try again."
+    }
 
     $APIBase = 'https://www.whoisxmlapi.com/whoisserver/DNSService'
 
