@@ -24,7 +24,7 @@ Copy the `Microsoft.PowerShell_profile.ps1` and corresponding config file to `C:
 
 The next time you load a PowerShell session, the DFIR PowerShell profile will be loaded. Keep in mind that each time you need to edit or update the profile, you will need to replace it (which usually requires admin privileges)
 
-## Profile Details
+## DFIR PowerShell Profile Details
 
 ### Configuration Section
 
