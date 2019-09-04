@@ -2,6 +2,28 @@
 
 This PowerShell profile was created to assist with common DFIR related tasks in Windows PowerShell. The intent was to give more of a Bash feel for what can be done at the commandline without having to move to a Linux machine. This is also a good profile to implement into a Windows analysis machine for common analysis commandline tools.
 
+### Installation
+
+There are two methods that you can use to install the DFIR PowerShell Profile
+
+#### Method 1: Dot Source the repo from your chosen installation location (Preferred)
+
+Clone (or download) this repo to a location of your choosing.
+
+Open or create the file `Microsoft.PowerShell_profile.ps1` located in `C:\Windows\System32\WindowsPowerShell\v1.0\`
+
+Add the following line: `. C:\Path\to\repo\install\directory\Microsoft.PowerShell_profile.ps1`
+
+The next time you load a PowerShell session, the DFIR PowerShell Profile will be dot sourced by the main profile and all will be loaded accordingly. Additionally, you can seamlessly update and modify the profile and config file without needing admin privileges.
+
+#### Method 2: Place the DFIR PowerShell Profile into `C:\Windows\System32\WindowsPowerShell\v1.0`
+
+Clone (or download) this repo to a location of your choosing.
+
+Copy the `Microsoft.PowerShell_profile.ps1` and corresponding config file to `C:\Windows\System32\WindowsPowerShell\v1.0\`
+
+The next time you load a PowerShell session, the DFIR PowerShell profile will be loaded. Keep in mind that each time you need to edit or update the profile, you will need to replace it (which usually requires admin privileges)
+
 ### Configuration Section
 
 #### Shell Colors
