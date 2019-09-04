@@ -25,24 +25,33 @@ $DefaultConfig = @{
     )
 
     #PowerShell Remoting Options
-    $PSSessionOption.NoMachineProfile = $true
+    NoMachineProfile = $true
 }
 #---------End Configuration Section---------#
 
 #Try to get the config file (if used)
 try {
+
     Import-LocalizedData -BindingVariable 'Config' -BaseDirectory $PSScriptRoot -FileName 'Config.psd1' -ErrorAction 'Stop'
-    $DefaultConfig.Keys | Where-Object { $Config.Keys -NotContains $PSItem } | Foreach-Object { $Config.$PSItem = $DefaultConfig.$PSItem }
+    $DefaultConfig.Keys | Where-Object { $Config.Keys -NotContains $PSItem } | Foreach-Object { $Config.$PSItem = $DefaultConfig.$PSItem}
+
 } catch {
+
     Write-Verbose -Message "Encountered error: $PSItem"
     Write-Verbose -Message "No config file found, using the default config"
     $Config = $DefaultConfig
+
 }
+
+#PowerShell Remoting Options
+$PSSessionOption.NoMachineProfile = $Config.NoMachineProfile
 
 #Aliases
 foreach ($Alias in $Config.Aliases) {
+    
     Write-Verbose -Message "Creating $($Alias.Name) Alias"
     Set-Alias @Alias
+
 }
 
 #Modules to Import
@@ -251,6 +260,58 @@ function Convert-FromMsftFileTime{
 
         [DateTime]::FromFileTimeUtc($InputObject)
     }  
+}
+
+#XML based WhoIs lookups (https://www.whoisxmlapi.com - 500 free queries, plans are really cheap afterwards)
+function WhoIs{
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true,Position=0)][String]$Domain,
+        [String]$APIKey = $Config.XMLAPIKey
+    )
+
+    process {
+        $APIBase = 'https://www.whoisxmlapi.com/whoisserver/WhoisService'
+
+        $Uri = "{0}?apiKey={1}&domainName={2}" -f $APIBase,$APIKey,$Domain
+        Write-Verbose ("Uri: {0}")
+
+        $Response = Invoke-RestMethod -Uri $Uri -Method Get
+        if ($Response.ErrorMessage) {
+            throw $Response.ErrorMessage.msg
+        }
+
+        $Response.WhoisRecord
+    }
+}
+
+function DNSLookup{
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true,Position=0)][String]$Domain,
+        [String]$APIKey = $Config.XMLAPIKey,
+        [string]$Type = '_all'
+    )
+
+    $APIBase = 'https://www.whoisxmlapi.com/whoisserver/DNSService'
+
+    $Uri = "{0}?apiKey={1}&domainName={2}&type={3}" -f $APIBase,$APIKey,$Domain,$Type
+    Write-Verbose ("Uri: {0}")
+
+    $Response = Invoke-RestMethod -Uri $Uri -Method Get
+        if ($Response.ErrorMessage) {
+            throw $Response.ErrorMessage.msg
+        }
+
+    $DNSTypeList = @()
+    $DNSTypes = $Response.Dnsdata.Dnsrecords
+    $DNSTypes | gm | ? {$_.MemberType -eq 'Property'} | Foreach-Object {$DNSTypeList += $_.Name}
+
+    foreach ($DNSType in $DNSTypeList){
+
+        Write-Host ("{0} records for {1}`n`n" -f $DNSType,$Domain)
+        $DNSTypes.$DNSType
+    }
 }
 
 $VerbosePreference = $TmpVerbosePreference

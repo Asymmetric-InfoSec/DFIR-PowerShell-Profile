@@ -19,5 +19,9 @@
     # )
     
     # ####PowerShell Remoting Options
-    # $PSSessionOption.NoMachineProfile = $true
+    # NoMachineProfile = $true
+
+    # ####WhoIs API Key 
+    # #XML based WhoIs lookups (https://www.whoisxmlapi.com - 500 free queries, plans are really cheap afterwards)
+    # XMLAPIKey = 
 }
