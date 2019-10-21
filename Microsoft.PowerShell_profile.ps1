@@ -54,6 +54,16 @@ foreach ($Alias in $Config.Aliases) {
 
 }
 
+#Add System.Web type for URL encoding
+try {
+
+    Add-Type -AssemblyName System.Web -Force
+
+} catch {
+
+    Write-Warning 'Could not load type System.Web via Add-Type. URL-Encode and URL-Decode will not be available.'
+}
+
 #Modules to Import
 foreach ($Module in $Config.ImportModules) {
     Write-Verbose -Message "Importing $($Module.Name) Module"
@@ -149,7 +159,7 @@ function URL-Encode{
     )
 
     process {
-
+        
         [System.Web.HttpUtility]::UrlEncode($InputObject)
     }
 }
@@ -163,7 +173,7 @@ function URL-Decode{
     )
 
     process {
-
+        
         [System.Web.HttpUtility]::UrlDecode($InputObject)
     } 
 }
