@@ -57,7 +57,7 @@ foreach ($Alias in $Config.Aliases) {
 #Add System.Web type for URL encoding
 try {
 
-    Add-Type -AssemblyName System.Web -Force
+    Add-Type -AssemblyName System.Web
 
 } catch {
 
