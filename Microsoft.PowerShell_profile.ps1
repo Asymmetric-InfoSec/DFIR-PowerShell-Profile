@@ -262,6 +262,40 @@ function Convert-FromMsftFileTime{
     }  
 }
 
+#Defang-URL/Defang-IP/Defang-Domain: Converts URL, IP address, or domain to defanged version
+function Defang-URL{
+    [CmdletBinding()]
+    [Alias('Defang-IP')]
+    [Alias('Defang-Domain')]
+    param(
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
+        [string] $InputObject
+    )
+
+    process {
+
+        $OutputObject = $InputObject -Replace '\.','[.]' -Replace 'http','hxxp'
+        return $OutputObject
+    }  
+}
+
+#Refang-URL/Refang-IP/Refang-Domain: Converts URL, IP address, or domain to fanged version from defanged version
+function Refang-URL{
+    [CmdletBinding()]
+    [Alias('Refang-IP')]
+    [Alias('Refang-Domain')]
+    param(
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
+        [string] $InputObject
+    )
+
+    process {
+
+        $OutputObject = $InputObject -Replace '\[\.\]','.' -Replace 'hxxp','http'
+        return $OutputObject
+    }  
+}
+
 #XML based WhoIs lookups (https://www.whoisxmlapi.com - 500 free queries, plans are really cheap afterwards)
 function WhoIs{
     [CmdletBinding()]
