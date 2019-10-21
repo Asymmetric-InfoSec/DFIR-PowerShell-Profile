@@ -111,6 +111,34 @@ Example: `Convert-FromMsftFileTime 132120659970000000`
 
 Result: `Wednesday, September 4, 2019 10:19:57`
 
+##### `Defang-URL`/`Defang-IP`/`Defang-Domain`: Converts URL, IP address, or domain to defanged version
+
+Example: `Defang-URL http://malicious.domain.com`
+
+Result: `hxxp://malicious[.]domain[.]com`
+
+Example: `Defang-IP 10.100.200.237`
+
+Result: `10[.]100[.]200[.]237`
+
+Example: `Defang-Domain malicious.domain`
+
+Result: `malicious[.]domain`
+
+##### `Refang-URL`/`Refang-IP`/`Refang-Domain`: Converts URL, IP address, or domain to fanged version from defanged version
+
+Example: `Refang-URL hxxp://malicious[.]domain[.]com`
+
+Result: `http://malicious.domain.com`
+
+Example: `Refang-IP 10[.]100[.]200[.]237`
+
+Result: `10.100.200.237`
+
+Example: `Refang-Domain malicious[.]domain`
+
+Result: `malicious.domain`
+
 #### API Based Functions 
 
 ##### `Whois`: Performs a whois lookup using an XML WhoIs API (https://www.whoisxmlapi.com) (500 queries free, but plans are really cheap afterwards)
