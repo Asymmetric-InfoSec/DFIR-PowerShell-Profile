@@ -85,4 +85,11 @@ if ($CurrentUser) {
     }
 }
 
+if (!(Test-Path "$PSScriptRoot\config.psd1")){
+
+    Write-Host 'Config not deteted. Creating DFIR-PowerShell-Profile config file.'
+    Copy-Item -Path "$PSScriptRoot\config.example.psd1" -Destination "$PSScriptRoot\config.psd1" -Force
+}
+
+
 Write-Host 'DFIR-PowerShell-Profile setup completed' -ForegroundColor 'Cyan' -BackgroundColor 'Black'
