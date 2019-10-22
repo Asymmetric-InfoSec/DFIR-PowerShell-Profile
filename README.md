@@ -4,9 +4,13 @@ This PowerShell profile was created to assist with common DFIR related tasks in 
 
 ### Installation
 
-There are two methods that you can use to install the DFIR PowerShell Profile
+There are a couple of methods that you can use to install the DFIR PowerShell Profile
 
-#### Method 1: Dot Source the repo from your chosen installation location (Preferred)
+#### Method 1: Use the Setup Script (Preferred)
+
+Run Setup.ps1 from the install directory and the setup will occur automatically.
+
+#### Method 2: Dot Source the repo from your chosen installation location
 
 Clone (or download) this repo to a location of your choosing.
 
@@ -16,7 +20,7 @@ Add the following line: `. C:\Path\to\repo\install\directory\Microsoft.PowerShel
 
 The next time you load a PowerShell session, the DFIR PowerShell Profile will be dot sourced by the main profile and all will be loaded accordingly. Additionally, you can seamlessly update and modify the profile and config file without needing admin privileges.
 
-#### Method 2: Place the DFIR PowerShell Profile into `C:\Windows\System32\WindowsPowerShell\v1.0`
+#### Method 3: Place the DFIR PowerShell Profile into `C:\Windows\System32\WindowsPowerShell\v1.0`
 
 Clone (or download) this repo to a location of your choosing.
 
