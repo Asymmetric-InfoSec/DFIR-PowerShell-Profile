@@ -8,7 +8,7 @@ There are a couple of methods that you can use to install the DFIR PowerShell Pr
 
 #### Method 1: Use the Setup Script (Preferred)
 
-Run Setup.ps1 from the install directory and the setup will occur automatically.
+Run `Setup.ps1` from the install directory and the setup will occur automatically.
 
 #### Method 2: Dot Source the repo from your chosen installation location
 
