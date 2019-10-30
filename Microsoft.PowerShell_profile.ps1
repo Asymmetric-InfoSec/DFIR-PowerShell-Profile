@@ -66,6 +66,11 @@ try {
 
 #Modules to Import
 foreach ($Module in $Config.ImportModules) {
+    if ($Module.ExecuteCommand) {
+        Write-Verbose -Message "Executing: '$($Module.ExecuteCommand)'"
+        Invoke-Expression -Command $Module.ExecuteCommand
+        $null = $Module.Remove('ExecuteCommand')
+    }
     Write-Verbose -Message "Importing $($Module.Name) Module"
     Import-Module @Module -Force
 }
