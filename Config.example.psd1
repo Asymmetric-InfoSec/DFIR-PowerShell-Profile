@@ -10,7 +10,7 @@
 
     # ####Modules to import
     # ImportModules = @(
-    #     @{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'}
+    #     @{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'; ExecuteCommand='$ENV:ADPS_LoadDefaultDrive = 0'}
     # )
 
     # ####Aliases
