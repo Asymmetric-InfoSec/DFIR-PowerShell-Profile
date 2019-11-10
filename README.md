@@ -96,24 +96,28 @@ Result: `Hack all the things`
 #### Timestamp Conversions
 
 ##### `Convert-ToEpoch`: Convert human readable date and time to Epoch timestamp (All timestamps assume UTC)
+`[Alias('ConvertTo-Epoch')]`
 
 Example: `Convert-ToEpoch $(Get-Date)`
 
 Result: `1567592252`
 
 ##### `Convert-FromEpoch`: Converts from Epoch timestamp to human readable timestamp (All timestamps assume UTC)
+`[Alias('ConvertFrom-Epoch')]`
 
 Example: `Convert-FromEpoch 1567592252`
 
 Result: `Wednesday, September 4, 2019 10:17:32`
 
 ##### `Convert-ToMsftFileTime`: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
+`[Alias('ConvertTo-MsftFileTime')]`
 
 Example: `Convert-ToMsftFileTime $(Get-Date)`
 
 Result: `132120659970000000`
 
 ##### `Convert-FromMsftFileTime`: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
+`[Alias('ConvertFrom-MsftFiletime')]`
 
 Example: `Convert-FromMsftFileTime 132120659970000000`
 
