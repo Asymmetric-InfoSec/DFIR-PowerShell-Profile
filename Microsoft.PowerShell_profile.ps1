@@ -46,6 +46,9 @@ try {
 #PowerShell Remoting Options
 $PSSessionOption.NoMachineProfile = $Config.NoMachineProfile
 
+#Web request Options - Limited to all versions of TLS 
+[System.Net.ServicePointManager]::SecurityProtocol = "Tls12","Tls11","Tls"
+
 #Aliases
 foreach ($Alias in $Config.Aliases) {
     
