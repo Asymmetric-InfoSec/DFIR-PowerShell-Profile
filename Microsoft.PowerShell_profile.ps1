@@ -220,6 +220,7 @@ function Hex-Decode{
 #Convert-ToEpoch: Converts from human readable date and time to Epoch timestamp (All timestamps assume UTC)
 function Convert-ToEpoch{
     [CmdletBinding()]
+    [Alias('ConvertTo-Epoch')]
     param(
         [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
@@ -235,6 +236,7 @@ function Convert-ToEpoch{
 #Convert-FromEpoch: Converts from Epoch timestamp to human readable timestamp (All timestamps assume UTC)
 function Convert-FromEpoch{
     [CmdletBinding()]
+    [Alias('ConvertFrom-Epoch')]
     param(
         [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
@@ -255,6 +257,7 @@ function Convert-FromEpoch{
 #Convert-ToMsftFileTime: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
 function Convert-ToMsftFileTime{
     [CmdletBinding()]
+    [Alias('ConvertTo-MsftFileTime')]
     param(
         [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
@@ -269,6 +272,7 @@ function Convert-ToMsftFileTime{
 #Convert-FromMsftFileTime: Converts from a human readable data and time to Microsoft FileTime timestamp (All timestamps assume UTC)
 function Convert-FromMsftFileTime{
     [CmdletBinding()]
+    [Alias('ConvertFrom-MsftFileTime')]
     param(
         [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
         [string] $InputObject
