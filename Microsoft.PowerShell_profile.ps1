@@ -14,11 +14,20 @@ $DefaultConfig = @{
     #Working/Startup Directory
     WorkingDirectory = 'C:\'
 
-    #Modules to import
-    ImportModules = @(
-        @{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'}
+    #Modules to import for all users
+    ImportModules_AllUsers = @(
+        @{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'; ExecuteCommand='$ENV:ADPS_LoadDefaultDrive = 0'}
     )
 
+    #Modules to import specific to admin context
+    ImportModules_AdminUsers = @(
+        @{}
+    )
+
+    #Modules to import specific to user context
+    ImportModules_NonPrivUsers = @(
+        @{}
+    )
     #Aliases
     Aliases = @(
         @{Name = 'claer';Value='clear'}
@@ -67,8 +76,8 @@ try {
     Write-Warning 'Could not load type System.Web via Add-Type. URL-Encode and URL-Decode will not be available.'
 }
 
-#Modules to Import
-foreach ($Module in $Config.ImportModules) {
+#Modules to Import for all users
+foreach ($Module in $Config.ImportModules_AllUsers) {
     if ($Module.ExecuteCommand) {
         Write-Verbose -Message "Executing: '$($Module.ExecuteCommand)'"
         Invoke-Expression -Command $Module.ExecuteCommand
@@ -78,17 +87,38 @@ foreach ($Module in $Config.ImportModules) {
     Import-Module @Module -Force
 }
 
-#Console Appearance adjustments - Change colors as desired in the configuration section
+#Context specific actions
 if ($Host.UI.RawUI.WindowTitle -match 'Administrator') {
 
     $Host.UI.RawUI.BackgroundColor = $Config.AdministratorBackground
     $Host.UI.RawUI.ForegroundColor = $Config.AdministratorForeground
+
+    #Modules to Import specific to Admin users
+    foreach ($Module in $Config.ImportModules_AdminUsers) {
+        if ($Module.ExecuteCommand) {
+            Write-Verbose -Message "Executing: '$($Module.ExecuteCommand)'"
+            Invoke-Expression -Command $Module.ExecuteCommand
+            $null = $Module.Remove('ExecuteCommand')
+        }
+        Write-Verbose -Message "Importing $($Module.Name) Module"
+        Import-Module @Module -Force
+    }
 
 } else {
 
     $Host.UI.RawUI.BackgroundColor = $Config.UserBackground
     $Host.UI.RawUI.ForegroundColor = $Config.UserForeground
 
+    #Modules to Import specific to non-admin users
+    foreach ($Module in $Config.ImportModules_NonPrivUsers) {
+        if ($Module.ExecuteCommand) {
+            Write-Verbose -Message "Executing: '$($Module.ExecuteCommand)'"
+            Invoke-Expression -Command $Module.ExecuteCommand
+            $null = $Module.Remove('ExecuteCommand')
+        }
+        Write-Verbose -Message "Importing $($Module.Name) Module"
+        Import-Module @Module -Force
+    }
 }
 
 #Change to Starting working directory
