@@ -39,9 +39,13 @@ Allows you to specifiy the shell colors associated with administrator and user s
 Allows you to specify the directory that PowerShell will move to after loading the profile
 
 #### Modules to Import
-Allows you to specify what modules are loaded by PowerShell. Each module should be added to the array as a hashtable with key value pairs representing parameters and the deisred parameter values. 
+Allows you to specify what modules are loaded by PowerShell. Each module should be added to the array as a hashtable with key value pairs representing parameters and the deisred parameter values. Note that there are three methods that modules can be imported: for all users, for admins only, and for non-privileged users only. There are separate sections for each in the config for each to control how imports are completed.
 
-Example: Adding `@{Name=ActiveDirectory;ErrorAction=SilentlyContinue}` to the `$ImportModules` array would result in the following PowerShell command being executed by the profile import: `Import-Module -Name ActiveDirectory -ErrorAction SilentlyContinue -Force`
+Example: Adding `@{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'; ExecuteCommand='$ENV:ADPS_LoadDefaultDrive = 0'}` to the `$ImportModules` array would result in the following PowerShell command being executed by the profile import: First, the command `'$ENV:ADPS_LoadDefaultDrive = 0'` would be executed then `Import-Module -Name ActiveDirectory -ErrorAction SilentlyContinue -Force` would be run subsequently. The `ExecuteCommand` allows you to take preceeding actions for a specific module if desired. 
+
+Note that the `ExecuteCommand` option is not required. For instance:
+
+`@{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'}` works without issue and would be the same as executing `Import-Module -Name ActiveDirectory -ErrorAction SilentlyContinue -Force`
 
 #### Aliases
 Allows you to create aliases to use during your PowerShell session. Each alias should be added to the array as a hashtable with key values pairs representing the `Name` and `Value` for the alias.
