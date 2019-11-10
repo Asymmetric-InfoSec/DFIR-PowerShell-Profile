@@ -8,9 +8,19 @@
     # ####Working/Startup Directory
     # WorkingDirectory = 'C:\'
 
-    # ####Modules to import
-    # ImportModules = @(
+    # ####Modules to import for all users
+    # ImportModules_AllUsers = @(
     #     @{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'; ExecuteCommand='$ENV:ADPS_LoadDefaultDrive = 0'}
+    # )
+
+    # #####Modules to import specific to admin context
+    # ImportModules_AdminUsers = @(
+    #     @{}
+    # )
+
+    # #####Modules to import specific to user context
+    # ImportModules_NonPrivUsers = @(
+    #     @{}
     # )
 
     # ####Aliases
