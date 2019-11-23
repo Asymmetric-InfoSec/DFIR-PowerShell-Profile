@@ -10,17 +10,17 @@
 
     # ####Modules to import for all users
     # ImportModules_AllUsers = @(
-    #     @{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'; ExecuteCommand='$ENV:ADPS_LoadDefaultDrive = 0'}
+    #    # @{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'; ExecuteCommand='$ENV:ADPS_LoadDefaultDrive = 0'}
     # )
 
     # #####Modules to import specific to admin context
     # ImportModules_AdminUsers = @(
-    #     @{}
+    #    # @{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'; ExecuteCommand='$ENV:ADPS_LoadDefaultDrive = 0'}
     # )
 
     # #####Modules to import specific to user context
     # ImportModules_NonPrivUsers = @(
-    #     @{}
+    #    # @{Name='ActiveDirectory'; ErrorAction='SilentlyContinue'; ExecuteCommand='$ENV:ADPS_LoadDefaultDrive = 0'}
     # )
 
     # ####Aliases
