@@ -9,15 +9,7 @@ param(
     [Parameter(ParameterSetName = "CurrentUserCurrentHost", Position = 0, Mandatory = $false)]
     [Switch]$CurrentUserCurrentHost,
     [Parameter(ParameterSetName = "CurrentUserAllHosts", Position = 0, Mandatory = $false)]
-    [Switch]$CurrentUserAllHosts,
-
-    [ValidateScript({
-        if (@($Profile.AllUsersAllHosts, $Profile.AllUsersCurrentHost, $Profile.CurrentUserAllHosts, $Profile.CurrentUserCurrentHost) -NotContains $PSItem) {
-            throw 'Path is not a valid PowerShell profile location. Run ''$Profile | Select-Object -Property *'' to view all profile options.'
-        }
-        return $true
-    })]
-    [String]$Path
+    [Switch]$CurrentUserAllHosts
  
 )
 
@@ -39,7 +31,7 @@ $ScriptText = @'
 '@ -f (Get-Date).ToUniversalTime(),$ProfileLocation
 
 # Make sure the DFIR-PowerShell-Profile and either of the configuration files are present
-if (!(Test-Path -Path $ProfileLocation -PathType 'Leaf') -or !(Test-Path -Path $ConfigLocation -PathType 'Leaf' -or Test-Path -Path $ExampleConfigLocation -PathType 'Leaf')) {
+if (!(Test-Path -Path $ProfileLocation -PathType 'Leaf') -or !((Test-Path -Path $ConfigLocation -PathType 'Leaf') -or (Test-Path -Path $ExampleConfigLocation -PathType 'Leaf'))) {
 
     throw 'DFIR Profile or Configuration not detected, re-download this project and try again.'
 
