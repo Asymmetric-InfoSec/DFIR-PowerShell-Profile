@@ -1,7 +1,7 @@
 ########## DFIR PowerShell Profile ##########
 
 $TmpVerbosePreference = $VerbosePreference
-#$VerbosePreference = 'Continue'
+$VerbosePreference = 'Continue'
 
 #--------Begin Configuration Section--------#
 $DefaultConfig = @{
@@ -353,11 +353,11 @@ function WhoIs{
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true,Position=0)][String]$Domain,
-        [String]$APIKey = $Config.XMLAPIKey
+        [Parameter(Mandatory=$false,Position=1)][String]$APIKey=$Config.XMLAPIKey
     )
 
     process {
-
+        
         if (!$APIKey){
 
             throw "No API key detected. Add API key to config file and try again."
@@ -382,8 +382,8 @@ function DNSLookup{
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true,Position=0)][String]$Domain,
-        [String]$APIKey = $Config.XMLAPIKey,
-        [string]$Type = '_all'
+        [String]$APIKey=$Config.XMLAPIKey,
+        [string]$Type='_all'
     )
 
     if (!$APIKey){
@@ -415,4 +415,4 @@ function DNSLookup{
 $VerbosePreference = $TmpVerbosePreference
 
 #Clean up created defaultconfig and config variables so they don't appear in session
-Remove-Variable -Name 'Alias','DefaultConfig','Config','Module','TmpVerbosePreference' -Force -ErrorAction 'SilentlyContinue'
+#Remove-Variable -Name 'Alias','DefaultConfig','Config','Module','TmpVerbosePreference' -Force -ErrorAction 'SilentlyContinue'
