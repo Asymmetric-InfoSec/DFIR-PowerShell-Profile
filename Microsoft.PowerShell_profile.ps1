@@ -412,6 +412,87 @@ function DNSLookup{
     }
 }
 
+#Malware Analysis Functions (Use at your own risk)
+#Deflates/decompresses B64 memory stream to text
+function Malware-DeflateB64MemStream2Text {
+	
+	param(
+	   
+       [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
+	   [String]$InputObject,
+
+       [Parameter(Position=1,Mandatory=$false)]
+       [Switch]$OutputToDisk,
+
+       [Parameter(Position=2,Mandatory=$false)]
+       [String]$OutputRoot=((Get-Location).Path)
+	)
+
+	process {
+
+        #Get Data from B64 String
+		$Data = (New-Object IO.StreamReader(New-Object IO.Compression.DeflateStream([IO.MemoryStream][Convert]::FromBase64String($InputObject),[IO.Compression.CompressionMode]::Decompress)),[Text.Encoding]::ASCII).ReadToEnd()
+
+        #Write to Console
+        $Banner = @'
+
+##############
+Decoded Data:
+##############
+
+'@ 
+        Write-Host $Banner
+        Write-Host $Data
+
+        #Optionally Output to contents to disk 
+        if ($OutputToDisk) {
+
+            #Get UID for output of file 
+            $UID = (Get-Date -UFormat %s).Split('.')[0]
+
+            #Output decoded contents to file
+            $Data | Out-File ('{0}\Decoded_{1}.txt' -f $OutputRoot, $UID) 
+        }
+	}
+}
+
+#Converts byte streams to bin files for analysis (most common with shellcode discovered in PowerShell commands)
+function Malware-Bytes2Bin {
+
+    param (
+
+        [Parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true)]
+        [String]$InputObject,
+
+        [Parameter(Position=1,Mandatory=$false)]
+        [Int]$XOR,
+
+        [Parameter(Position=2,Mandatory=$false)]
+        [String]$OutputRoot=((Get-Location).Path)
+
+    )
+
+    process{
+
+        #Convert base64 into byte stream
+        [Byte[]]$Data = [System.Convert]::FromBase64String($InputObject)
+
+        #If data needs to be XOR'd prior to outputting to bin file
+        if ($XOR){
+
+            for ($x = 0; $x -lt $Data.Count; $x++) {
+                
+                $Data[$x] = $Data[$x] -bxor $XOR
+            }
+        }
+
+        #Write Output to bin file
+        $UID = (Get-Date -UFormat %s).Split('.')[0]
+        $BinPath = ('{0}\Decoded_{1}.bin' -f $OutputRoot, $UID)
+        [IO.File]::WriteAllBytes($BinPath,$Data)
+    }
+}
+
 $VerbosePreference = $TmpVerbosePreference
 
 #Clean up created defaultconfig and config variables so they don't appear in session
