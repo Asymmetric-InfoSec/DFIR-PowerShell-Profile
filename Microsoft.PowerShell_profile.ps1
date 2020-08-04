@@ -504,7 +504,7 @@ function Create-Case {
         [Parameter(Position=0,Mandatory=$true)]
         [String]$Name,
 
-        [Parameter(Position=0,Mandatory=$false)]
+        [Parameter(Position=1,Mandatory=$false)]
         [String]$Path=(Get-Location)
 
     )
