@@ -28,6 +28,9 @@
     #     @{Name = 'claer';Value='clear'}
     # )
     
+    # ####Case directory structure
+    #Case_Dirs = @('Malware','Logs','Notes','PCAPs')
+    
     # ####PowerShell Remoting Options
     # NoMachineProfile = $true
 
