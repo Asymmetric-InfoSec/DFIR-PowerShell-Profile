@@ -32,6 +32,9 @@ $DefaultConfig = @{
     Aliases = @(
         # @{Name = 'claer';Value='clear'}
     )
+    
+    #Case directory structure
+    Case_Dirs = @('Malware','Logs','Notes','PCAPs')
 
     #PowerShell Remoting Options
     NoMachineProfile = $true
@@ -490,6 +493,43 @@ function Malware-Bytes2Bin {
         $UID = (Get-Date -UFormat %s).Split('.')[0]
         $BinPath = ('{0}\Decoded_{1}.bin' -f $OutputRoot, $UID)
         [IO.File]::WriteAllBytes($BinPath,$Data)
+    }
+}
+
+#Creates a case structure for organizing investigation samples, notes, etc.
+function Create-Case {
+
+    param (
+
+        [Parameter(Position=0,Mandatory=$true)]
+        [String]$Name,
+
+        [Parameter(Position=0,Mandatory=$false)]
+        [String]$Path=(Get-Location)
+
+    )
+
+    process{
+        #Create parent directory
+        try{
+            $Parent = ('{0}\{1}' -f $Path,$Name)
+            $Null = New-Item -Type Directory -Path $Parent -Force -ErrorAction Stop
+        
+        }catch{
+
+            throw ("Could not create parent directory at {0}\{1}. Quitting." -f $Path,$Name)
+        }
+
+        foreach ($Dir in $Config.Case_Dirs){
+
+            try {
+
+                $Null = New-Item -Type Directory -Path ('{0}\{1}' -f $Parent,$Dir) -Force -ErrorAction Stop
+            } catch {
+
+                Write-Warning ("Directory could not be created at {0}\{1}. Create manually if desired." -f $Parent,$Dir)
+            }
+        }
     }
 }
 
